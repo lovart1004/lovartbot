@@ -1,4 +1,4 @@
-const API_KEY = "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";
+const API_KEY = "";
 document.getElementById("send-btn").addEventListener("click", sendMessage);
 document.getElementById("user-input").addEventListener("keypress", function(e){
     if (e.key === "Enter") sendMessage();
@@ -55,3 +55,4 @@ function addMessage(text, sender) {
     box.scrollTop = box.scrollHeight;
 
 }
+
