@@ -5,7 +5,7 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: "OPENAI_API_KEY is missing" });
   }
 
-  const { prompt } = req.body;
+  const { message } = req.body;
 
   try {
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -16,7 +16,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: "gpt-4o-mini",
-        messages: [{ role: "user", content: prompt }],
+        messages: [{ role: "user", content: message }],
       }),
     });
 
