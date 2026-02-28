@@ -1,19 +1,35 @@
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
-
-  const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-  if (!OPENAI_API_KEY) {
-    return res.status(500).json({ error: "OPENAI_API_KEY is missing" });
-  }
-
-  const { message } = req.body || {};
-  if (!message) {
-    return res.status(400).json({ error: "No message provided" });
-  }
-
   try {
+    // 1) 메서드 체크
+    if (req.method !== "POST") {
+      return res.status(405).json({ error: "Method not allowed" });
+    }
+
+    // 2) body 안전 파싱 (req.body가 undefined/문자열/객체 모두 대응)
+    let body = req.body;
+    if (!body) {
+      // 일부 환경에서 body가 비는 경우가 있어 안전 처리
+      body = {};
+    }
+    if (typeof body === "string") {
+      try {
+        body = JSON.parse(body);
+      } catch {
+        body = {};
+      }
+    }
+
+    const message = body?.message;
+    if (!message || typeof message !== "string") {
+      return res.status(400).json({ error: "message is required" });
+    }
+
+    const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+    if (!OPENAI_API_KEY) {
+      return res.status(500).json({ error: "OPENAI_API_KEY is missing" });
+    }
+
+    // 3) OpenAI 호출
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -26,17 +42,20 @@ export default async function handler(req, res) {
       }),
     });
 
-    const data = await response.json();
+    // 4) OpenAI 에러면 그대로 로그/반환
+    const data = await response.json().catch(() => ({}));
 
-    // OpenAI 에러 응답이면 그대로 보여주기
     if (!response.ok) {
-      return res.status(500).json({ error: data?.error?.message || "OpenAI error", raw: data });
+      return res.status(response.status).json({
+        error: "OpenAI request failed",
+        details: data,
+      });
     }
 
-    return res.status(200).json({
-      reply: data.choices?.[0]?.message?.content || "",
-    });
-  } catch (error) {
-    return res.status(500).json({ error: error.message });
+    const reply = data?.choices?.[0]?.message?.content ?? "(no reply)";
+    // ✅ 프론트가 기대하는 키: reply
+    return res.status(200).json({ reply });
+  } catch (err) {
+    return res.status(500).json({ error: err?.message || String(err) });
   }
 }
