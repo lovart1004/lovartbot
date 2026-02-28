@@ -38,7 +38,7 @@ export default async function handler(req, res) {
   data.choices?.[0]?.text ??
   "No response";
 
-res.status(200).json({ message: reply });
+res.status(200).json({ message: JSON.stringify(data) });
 
   } catch (error) {
     return res.status(500).json({
