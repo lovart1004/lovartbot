@@ -1,22 +1,25 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <title>애드센스 승인용 콘텐츠 챗봇</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>애드센스 승인용 콘텐츠 생성 챗봇</title>
+  <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
-    <div class="chat-container">
-        <div class="chat-header">애드센스 승인용 콘텐츠 생성 챗봇</div>
+  <div class="wrap">
+    <div class="card">
+      <div class="header">애드센스 승인용 콘텐츠 생성 챗봇</div>
 
-        <div id="chat-box" class="chat-box"></div>
+      <div id="chat-box" class="chat"></div>
 
-        <div class="chat-input-area">
-            <input id="user-input" type="text" placeholder="주제를 입력하세요. (예: 난방비 절약 방법)">
-            <button id="send-btn">전송</button>
-        </div>
+      <div class="input-row">
+        <input id="user-input" type="text" placeholder="주제를 입력하세요. (예: 난방비 절약 방법)" />
+        <button id="send-btn">전송</button>
+      </div>
     </div>
+  </div>
 
-    <script src="chatbot.js"></script>
+  <script src="./chatbot.js"></script>
 </body>
 </html>
