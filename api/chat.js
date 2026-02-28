@@ -40,8 +40,6 @@ export default async function handler(req, res) {
 
 res.status(200).json({ message: reply });
 
-res.status(200).json({ message: reply });
-
   } catch (error) {
     return res.status(500).json({
       error: error.message
