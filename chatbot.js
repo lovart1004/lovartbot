@@ -18,7 +18,7 @@ async function sendMessage() {
     });
 
     const data = await response.json();
-    addMessage(data.reply, "bot");
+    addMessage(data.message, "bot");
 }
 
 function addMessage(text, sender) {
