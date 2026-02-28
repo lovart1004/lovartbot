@@ -33,10 +33,12 @@ export default async function handler(req, res) {
       })
     });
 
-    const reply =
+ const reply =
   data.choices?.[0]?.message?.content ??
   data.choices?.[0]?.text ??
   "No response";
+
+res.status(200).json({ message: reply });
 
 res.status(200).json({ message: reply });
 
